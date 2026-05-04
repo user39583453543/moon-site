@@ -5,43 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MOON | Rust Team</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 body {
     margin: 0;
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Inter', sans-serif;
     background: #05070a;
     color: white;
-    display: flex;
 }
 
-/* SIDEBAR */
-.sidebar {
-    width: 200px;
-    height: 100vh;
-    background: #0a0f14;
-    padding-top: 20px;
+/* NAV */
+nav {
     position: fixed;
-}
-
-.sidebar a {
-    display: block;
-    padding: 15px;
-    color: #aaa;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.sidebar a:hover {
-    background: #111;
-    color: white;
-}
-
-/* MAIN CONTENT */
-.main {
-    margin-left: 200px;
     width: 100%;
+    top: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    text-align: center;
+    z-index: 1000;
+}
+
+nav a {
+    margin: 0 20px;
+    color: #ccc;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: white;
 }
 
 /* HERO */
@@ -52,17 +45,27 @@ header {
     align-items: center;
     justify-content: center;
     text-align: center;
+    position: relative;
+}
+
+/* dark overlay */
+header::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
 }
 
 header h1 {
+    font-family: 'Orbitron', sans-serif;
     font-size: 5rem;
-    letter-spacing: 8px;
-    color: white;
+    z-index: 1;
 }
 
 /* SECTIONS */
 section {
-    padding: 80px 20px;
+    padding: 100px 20px;
     max-width: 1000px;
     margin: auto;
 }
@@ -77,27 +80,35 @@ section {
 .card {
     background: #0d1117;
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 10px;
     text-align: center;
-    border: 1px solid #1f2933;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
 }
 
 /* BUTTON */
 .btn {
     display: inline-block;
     margin-top: 20px;
-    padding: 14px 28px;
+    padding: 12px 25px;
     background: white;
     color: black;
+    border-radius: 6px;
     text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
+    font-weight: 600;
 }
 
+.btn:hover {
+    opacity: 0.8;
+}
+
+/* FOOTER */
 footer {
     text-align: center;
     padding: 30px;
-    background: #020304;
     color: #777;
 }
 </style>
@@ -105,21 +116,18 @@ footer {
 
 <body>
 
-<div class="sidebar">
-    <a href="#home">Home</a>
+<nav>
     <a href="#about">About</a>
     <a href="#team">Team</a>
     <a href="#join">Join</a>
-</div>
+</nav>
 
-<div class="main">
-
-<header id="home">
+<header>
     <h1>MOON</h1>
 </header>
 
 <section id="about">
-    <h2>🌙 About Us</h2>
+    <h2>About</h2>
     <p>
         Moon is a team created by Calestia and Vexy with 3+ years of leading experience.
         They create the worst to the best and have a unique play style compared to the average groups.
@@ -127,7 +135,7 @@ footer {
 </section>
 
 <section id="team">
-    <h2>🚀 Team</h2>
+    <h2>Team</h2>
     <div class="team">
         <div class="card">Leader<br><small>Vexy</small></div>
         <div class="card">Leader<br><small>Calestia</small></div>
@@ -140,17 +148,14 @@ footer {
 </section>
 
 <section id="join">
-    <h2>🛰️ Join MOON</h2>
-    <p>Think you’ve got what it takes?</p>
+    <h2>Join</h2>
     <p>Make a ticket here:</p>
-    <a href="https://discord.gg/moonteam" class="btn" target="_blank">Join Discord</a>
+    <a href="https://discord.gg/moonteam" target="_blank" class="btn">Join Discord</a>
 </section>
 
 <footer>
-    © 2026 MOON Team | Rust Clan
+    © 2026 MOON Team
 </footer>
-
-</div>
 
 </body>
 </html>
