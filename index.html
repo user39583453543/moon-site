@@ -3,33 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MOON | Rust Team</title>
+<title>MOON</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    background: #05070a;
-    color: white;
+    background: #0b0f14;
+    color: #fff;
 }
 
-/* NAV */
+/* NAVBAR */
 nav {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    background: rgba(0,0,0,0.5);
-    backdrop-filter: blur(10px);
-    padding: 15px;
-    text-align: center;
-    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+    border-bottom: 1px solid #1f2933;
 }
 
 nav a {
-    margin: 0 20px;
-    color: #ccc;
+    color: #aaa;
     text-decoration: none;
 }
 
@@ -38,78 +34,60 @@ nav a:hover {
 }
 
 /* HERO */
-header {
-    height: 100vh;
+.hero {
+    text-align: center;
+    padding: 120px 20px;
     background: url('moon-banner.png') center/cover no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    position: relative;
 }
 
-/* dark overlay */
-header::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
+.hero h1 {
+    font-size: 4rem;
+    margin: 0;
 }
 
-header h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 5rem;
-    z-index: 1;
-}
-
-/* SECTIONS */
-section {
-    padding: 100px 20px;
-    max-width: 1000px;
+/* SECTION */
+.section {
+    max-width: 900px;
     margin: auto;
+    padding: 60px 20px;
+    border-bottom: 1px solid #1f2933;
 }
 
-/* TEAM */
+/* TEAM LIST */
 .team {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.card {
-    background: #0d1117;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    transition: 0.3s;
-}
-
-.card:hover {
-    transform: translateY(-5px);
+.member {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    background: #11161c;
+    border-radius: 6px;
 }
 
 /* BUTTON */
 .btn {
     display: inline-block;
     margin-top: 20px;
-    padding: 12px 25px;
-    background: white;
-    color: black;
-    border-radius: 6px;
+    padding: 10px 20px;
+    background: #1f2933;
+    color: white;
     text-decoration: none;
-    font-weight: 600;
+    border-radius: 5px;
 }
 
 .btn:hover {
-    opacity: 0.8;
+    background: #2c3a47;
 }
 
 /* FOOTER */
 footer {
     text-align: center;
     padding: 30px;
-    color: #777;
+    color: #666;
 }
 </style>
 </head>
@@ -117,44 +95,44 @@ footer {
 <body>
 
 <nav>
-    <a href="#about">About</a>
-    <a href="#team">Team</a>
-    <a href="#join">Join</a>
+    <a href="#">Home</a>
+    <a href="#team">Members</a>
+    <a href="#about">Info</a>
 </nav>
 
-<header>
+<div class="hero">
     <h1>MOON</h1>
-</header>
+</div>
 
-<section id="about">
+<div class="section" id="about">
     <h2>About</h2>
     <p>
         Moon is a team created by Calestia and Vexy with 3+ years of leading experience.
         They create the worst to the best and have a unique play style compared to the average groups.
     </p>
-</section>
+</div>
 
-<section id="team">
-    <h2>Team</h2>
+<div class="section" id="team">
+    <h2>Members</h2>
     <div class="team">
-        <div class="card">Leader<br><small>Vexy</small></div>
-        <div class="card">Leader<br><small>Calestia</small></div>
-        <div class="card">Co-Leader<br><small>Elec</small></div>
-        <div class="card">Builder<br><small>Real</small></div>
-        <div class="card">Builder<br><small>Jxst</small></div>
-        <div class="card">Builder<br><small>Lachs</small></div>
-        <div class="card">Builder<br><small>Loock</small></div>
+        <div class="member"><span>Vexy</span><span>Leader</span></div>
+        <div class="member"><span>Calestia</span><span>Leader</span></div>
+        <div class="member"><span>Elec</span><span>Co-Leader</span></div>
+        <div class="member"><span>Real</span><span>Builder</span></div>
+        <div class="member"><span>Jxst</span><span>Builder</span></div>
+        <div class="member"><span>Lachs</span><span>Builder</span></div>
+        <div class="member"><span>Loock</span><span>Builder</span></div>
     </div>
-</section>
+</div>
 
-<section id="join">
+<div class="section">
     <h2>Join</h2>
-    <p>Make a ticket here:</p>
+    <p>Make a ticket through Discord</p>
     <a href="https://discord.gg/moonteam" target="_blank" class="btn">Join Discord</a>
-</section>
+</div>
 
 <footer>
-    © 2026 MOON Team
+    © 2026 MOON
 </footer>
 
 </body>
