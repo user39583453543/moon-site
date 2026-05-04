@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOON — Rust Team</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --bg2: #0e0e10;
+    --surface: #141416;
+    --border: rgba(255,255,255,0.07);
+    --accent: #c8c8c8;
+    --white: #f0f0f0;
+    --dim: rgba(255,255,255,0.45);
+    --dimmer: rgba(255,255,255,0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+    backdrop-filter: blur(0px);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 4px;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  .nav-links a.active { color: var(--white); }
+  .nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0; right: 0;
+    height: 1px;
+    background: var(--white);
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-discord {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--dim);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .nav-discord:hover { border-color: rgba(255,255,255,0.25); color: var(--white); }
+
+  /* ── HERO ── */
+  #home {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 70% at 50% 30%, rgba(255,255,255,0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(80,80,120,0.08) 0%, transparent 60%);
+  }
+
+  /* Moon sphere */
+  .moon-sphere {
+    position: absolute;
+    top: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 35%,
+      #d8d8d8 0%,
+      #a0a0a0 25%,
+      #505060 55%,
+      #1a1a24 80%,
+      #080810 100%
+    );
+    box-shadow:
+      0 0 120px 40px rgba(160,160,200,0.06),
+      0 0 300px 80px rgba(100,100,160,0.04),
+      inset -30px -30px 60px rgba(0,0,0,0.8);
+    animation: moonFloat 8s ease-in-out infinite;
+  }
+
+  /* crater details */
+  .moon-sphere::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 55%, rgba(0,0,0,0.3) 0%, transparent 8%),
+      radial-gradient(circle at 65% 30%, rgba(0,0,0,0.2) 0%, transparent 6%),
+      radial-gradient(circle at 50% 70%, rgba(0,0,0,0.15) 0%, transparent 5%),
+      radial-gradient(circle at 75% 55%, rgba(0,0,0,0.2) 0%, transparent 7%);
+  }
+
+  /* mountain silhouettes */
+  .mountains {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 40%;
+    pointer-events: none;
+  }
+
+  .mountains svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* clouds */
+  .clouds {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .cloud {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+    filter: blur(30px);
+    animation: cloudDrift linear infinite;
+  }
+
+  .cloud:nth-child(1) { width: 400px; height: 120px; top: 25%; left: -10%; animation-duration: 40s; }
+  .cloud:nth-child(2) { width: 300px; height: 80px; top: 35%; right: -5%; animation-duration: 55s; animation-direction: reverse; }
+  .cloud:nth-child(3) { width: 500px; height: 100px; top: 20%; left: 20%; animation-duration: 70s; }
+
+  @keyframes cloudDrift {
+    from { transform: translateX(-100px); }
+    to { transform: translateX(100px); }
+  }
+
+  /* reflection */
+  .reflection {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 30%;
+    background: linear-gradient(to top, rgba(160,160,200,0.04) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  @keyframes moonFloat {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-12px); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    margin-top: 60px;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 14vw, 160px);
+    letter-spacing: 16px;
+    line-height: 1;
+    color: var(--white);
+    text-shadow:
+      0 0 80px rgba(255,255,255,0.15),
+      0 2px 40px rgba(0,0,0,0.8);
+    animation: fadeUp 1s ease forwards;
+  }
+
+  .hero-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-top: 6px;
+    animation: fadeUp 1s 0.15s ease both;
+  }
+
+  .hero-tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--dimmer);
+    margin-top: 24px;
+    animation: fadeUp 1s 0.3s ease both;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 40px;
+    padding: 14px 32px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.04);
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    animation: fadeUp 1s 0.45s ease both;
+  }
+
+  .hero-cta:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.4);
+    transform: translateY(-2px);
+  }
+
+  .hero-cta svg { transition: transform 0.2s; }
+  .hero-cta:hover svg { transform: translateX(4px); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTIONS COMMON ── */
+  section {
+    padding: 120px 0;
+  }
+
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--dimmer);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 0 0 48px;
+    height: 1px;
+    background: var(--dimmer);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 6vw, 72px);
+    letter-spacing: 6px;
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 28px;
+  }
+
+  /* ── TEAM / ROSTER ── */
+  #team {
+    background: var(--bg2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #team::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,200,255,0.025) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .team-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px;
+    text-align: center;
+  }
+
+  .team-header {
+    margin-bottom: 64px;
+  }
+
+  .team-header .section-label {
+    justify-content: center;
+  }
+
+  .team-header .section-label::after { display: none; }
+  .team-header .section-label::before {
+    content: '';
+    flex: 0 0 48px;
+    height: 1px;
+    background: var(--dimmer);
+  }
+
+  .roster-grid {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .member-card {
+    flex: 0 0 140px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 16px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .member-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .member-card:hover {
+    border-color: rgba(255,255,255,0.18);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .member-card:hover::before { opacity: 1; }
+
+  .member-role {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--dimmer);
+  }
+
+  .member-flag {
+    width: 60px;
+    height: 44px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    font-size: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .member-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--white);
+    text-align: center;
+  }
+
+  .member-country {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--dimmer);
+  }
+
+  .moon-divider {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+    opacity: 0.3;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    position: relative;
+  }
+
+  .about-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .about-text p {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--dim);
+    max-width: 440px;
+  }
+
+  .about-card {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--surface);
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .about-card-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(255,255,255,0.03) 0%, transparent 60%);
+  }
+
+  .about-moon-icon {
+    font-size: 56px;
+    filter: drop-shadow(0 0 20px rgba(200,200,255,0.2));
+  }
+
+  .about-card-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 10px;
+    color: var(--white);
+  }
+
+  .about-card-est {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--dimmer);
+    text-transform: uppercase;
+  }
+
+  /* ── APPLY ── */
+  #join {
+    background: var(--bg2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #join::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; right: -100px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(180,180,220,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .join-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .join-crescent {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 180px;
+    opacity: 0.7;
+    filter: drop-shadow(0 0 40px rgba(200,200,255,0.15));
+    animation: moonFloat 8s ease-in-out infinite;
+  }
+
+  .join-text p {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--dim);
+    margin-bottom: 36px;
+  }
+
+  .discord-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 28px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    color: var(--white);
+    text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+
+  .discord-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.35);
+    transform: translateY(-2px);
+  }
+
+  .discord-btn svg { color: #7289da; }
+
+  .discord-btn .btn-arrow {
+    margin-left: 6px;
+    opacity: 0.5;
+    font-size: 16px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 100%;
+  }
+
+  .footer-socials {
+    display: flex;
+    gap: 20px;
+  }
+
+  .social-icon {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--dimmer);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .social-icon:hover {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.25);
+  }
+
+  .footer-copy {
+    font-size: 12px;
+    color: var(--dimmer);
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#home">MOON</a>
+  <ul class="nav-links">
+    <li><a href="#home" class="active">HOME</a></li>
+    <li><a href="#team">TEAM</a></li>
+    <li><a href="#about">ABOUT</a></li>
+    <li><a href="#join">JOIN</a></li>
+    <li><a href="#join">CONTACT</a></li>
+  </ul>
+  <div class="nav-discord">
+    <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
+      <path d="M13.545 1.058A13.24 13.24 0 0 0 10.23 0c-.155.278-.337.652-.462.949a12.24 12.24 0 0 0-3.533 0A10.5 10.5 0 0 0 5.77 0a13.28 13.28 0 0 0-3.32 1.062C.357 3.9-.219 6.667.069 9.395a13.36 13.36 0 0 0 4.07 2.055c.328-.447.62-.92.872-1.418a8.676 8.676 0 0 1-1.374-.663c.115-.084.228-.171.337-.26 2.644 1.218 5.51 1.218 8.12 0 .11.089.223.176.337.26-.437.26-.9.489-1.375.664.252.498.543.97.872 1.417a13.32 13.32 0 0 0 4.072-2.053c.337-3.209-.576-5.95-2.455-8.34zM5.34 7.695c-.763 0-1.39-.702-1.39-1.565 0-.864.61-1.566 1.39-1.566.782 0 1.404.702 1.39 1.566 0 .863-.608 1.565-1.39 1.565zm5.14 0c-.762 0-1.389-.702-1.389-1.565 0-.864.61-1.566 1.39-1.566.781 0 1.404.702 1.39 1.566 0 .863-.607 1.565-1.39 1.565z"/>
+    </svg>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <div class="clouds">
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+  </div>
+  <div class="moon-sphere"></div>
+  <svg class="mountains" viewBox="0 0 1440 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 300 L0 220 L80 160 L160 200 L260 100 L360 170 L460 80 L560 150 L660 60 L760 130 L860 50 L960 140 L1060 70 L1160 160 L1260 90 L1360 180 L1440 140 L1440 300 Z" fill="#0a0a0b"/>
+    <path d="M0 300 L0 260 L120 200 L220 240 L340 170 L480 220 L600 160 L720 200 L840 140 L960 190 L1100 150 L1220 210 L1340 170 L1440 200 L1440 300 Z" fill="#0c0c0e" opacity="0.8"/>
+  </svg>
+  <div class="reflection"></div>
+  <div class="hero-content">
+    <div class="hero-title">MOON</div>
+    <div class="hero-sub">Rust Team</div>
+    <div class="hero-tagline">We don't follow. We take over.</div>
+    <a class="hero-cta" href="#join">
+      Make a Ticket
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<!-- TEAM / ROSTER -->
+<section id="team">
+  <div class="team-inner">
+    <div class="team-header">
+      <div class="section-label">Our Members</div>
+      <div class="section-title">ROSTER</div>
+    </div>
+    <div class="roster-grid">
+
+      <div class="member-card">
+        <div class="member-role">Leader</div>
+        <div class="member-flag">🇷🇺</div>
+        <div class="member-name">CALESTIA</div>
+        <div class="member-country">Russia</div>
+      </div>
+
+      <div class="member-card">
+        <div class="member-role">Leader</div>
+        <div class="member-flag">🇺🇸</div>
+        <div class="member-name">SWIGGLE</div>
+        <div class="member-country">United States</div>
+      </div>
+
+      <div class="member-card">
+        <div class="member-role">Co-Leader</div>
+        <div class="member-flag">🇷🇴</div>
+        <div class="member-name">VEXY</div>
+        <div class="member-country">Romania</div>
+      </div>
+
+      <div class="member-card">
+        <div class="member-role">Co-Leader</div>
+        <div class="member-flag">🇹🇷</div>
+        <div class="member-name">ZYREX</div>
+        <div class="member-country">Turkey</div>
+      </div>
+
+      <div class="member-card">
+        <div class="member-role">Builder</div>
+        <div class="member-flag">🇩🇪</div>
+        <div class="member-name">JXST LACHS</div>
+        <div class="member-country">Germany</div>
+      </div>
+
+      <div class="member-card">
+        <div class="member-role">Builder</div>
+        <div class="member-flag">🇿🇦</div>
+        <div class="member-name">LOOCK</div>
+        <div class="member-country">South Africa</div>
+      </div>
+
+      <div class="member-card">
+        <div class="member-role">Electrician</div>
+        <div class="member-flag">🇵🇱</div>
+        <div class="member-name">MARIO</div>
+        <div class="member-country">Poland</div>
+      </div>
+
+    </div>
+    <div class="moon-divider">🌙</div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-text">
+      <div class="section-label">About Us</div>
+      <div class="section-title">ABOUT MOON</div>
+      <p>Moon is a team created by Calestia and Vexy with 3+ years of leading experience, they create the worst to the best and have a unique play style compared to the average Groups.</p>
+    </div>
+    <div class="about-card">
+      <div class="about-card-bg"></div>
+      <div class="about-moon-icon">🌙</div>
+      <div class="about-card-name">MOON</div>
+      <div class="about-card-est">EST. 2023</div>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN / APPLY -->
+<section id="join">
+  <div class="join-inner">
+    <div class="join-text">
+      <div class="section-label">Join Us</div>
+      <div class="section-title">APPLY NOW</div>
+      <p>Think you have what it takes to join MOON?<br>Make a ticket in our Discord.</p>
+      <a class="discord-btn" href="https://discord.gg/moonteam" target="_blank">
+        <svg width="20" height="15" viewBox="0 0 20 15" fill="currentColor">
+          <path d="M16.93 1.33A16.55 16.55 0 0 0 12.79 0c-.19.35-.42.82-.58 1.19a15.3 15.3 0 0 0-4.41 0A13.1 13.1 0 0 0 7.21 0a16.6 16.6 0 0 0-4.15 1.33C.45 4.87-.27 8.33.09 11.74a16.7 16.7 0 0 0 5.09 2.57c.41-.56.77-1.15 1.09-1.77a10.85 10.85 0 0 1-1.72-.83c.14-.1.28-.21.42-.32 3.3 1.52 6.88 1.52 10.15 0 .14.11.28.22.42.32-.55.32-1.13.61-1.72.83.32.62.68 1.21 1.09 1.77a16.65 16.65 0 0 0 5.09-2.56c.42-4.01-.72-7.44-3.07-10.41zM6.68 9.62c-.95 0-1.73-.88-1.73-1.96 0-1.08.76-1.96 1.73-1.96.98 0 1.75.88 1.74 1.96 0 1.08-.76 1.96-1.74 1.96zm6.64 0c-.95 0-1.73-.88-1.73-1.96 0-1.08.76-1.96 1.73-1.96.98 0 1.75.88 1.74 1.96 0 1.08-.76 1.96-1.74 1.96z"/>
+        </svg>
+        discord.gg/moonteam
+        <span class="btn-arrow">↗</span>
+      </a>
+    </div>
+    <div class="join-crescent">🌙</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-socials">
+    <div class="social-icon" title="Discord">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
+        <path d="M13.545 1.058A13.24 13.24 0 0 0 10.23 0c-.155.278-.337.652-.462.949a12.24 12.24 0 0 0-3.533 0A10.5 10.5 0 0 0 5.77 0a13.28 13.28 0 0 0-3.32 1.062C.357 3.9-.219 6.667.069 9.395a13.36 13.36 0 0 0 4.07 2.055c.328-.447.62-.92.872-1.418a8.676 8.676 0 0 1-1.374-.663c.115-.084.228-.171.337-.26 2.644 1.218 5.51 1.218 8.12 0 .11.089.223.176.337.26-.437.26-.9.489-1.375.664.252.498.543.97.872 1.417a13.32 13.32 0 0 0 4.072-2.053c.337-3.209-.576-5.95-2.455-8.34zM5.34 7.695c-.763 0-1.39-.702-1.39-1.565 0-.864.61-1.566 1.39-1.566.782 0 1.404.702 1.39 1.566 0 .863-.608 1.565-1.39 1.565zm5.14 0c-.762 0-1.389-.702-1.389-1.565 0-.864.61-1.566 1.39-1.566.781 0 1.404.702 1.39 1.566 0 .863-.607 1.565-1.39 1.565z"/>
+      </svg>
+    </div>
+    <div class="social-icon" title="Twitter">
+      <svg width="16" height="14" viewBox="0 0 16 14" fill="currentColor">
+        <path d="M14.36 3.5c.01.14.01.28.01.42 0 4.28-3.26 9.22-9.22 9.22A9.16 9.16 0 0 1 0 11.68c.26.03.51.04.78.04a6.49 6.49 0 0 0 4.02-1.38 3.24 3.24 0 0 1-3.02-2.25c.2.03.4.05.61.05.29 0 .58-.04.85-.1a3.24 3.24 0 0 1-2.6-3.18v-.04c.44.24.94.39 1.48.41A3.24 3.24 0 0 1 .66.59a9.2 9.2 0 0 0 6.68 3.39 3.65 3.65 0 0 1-.08-.74A3.24 3.24 0 0 1 12.87.9a6.38 6.38 0 0 0 2.06-.79 3.25 3.25 0 0 1-1.43 1.79 6.49 6.49 0 0 0 1.86-.51 6.97 6.97 0 0 1-1.62 1.68c.01.13.01.25.01.38.02 0 .62 0 .61 0z"/>
+      </svg>
+    </div>
+    <div class="social-icon" title="YouTube">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
+        <path d="M15.66 1.88A2 2 0 0 0 14.26.47C13.01.13 8 .13 8 .13s-5.01 0-6.26.34A2 2 0 0 0 .34 1.88C0 3.14 0 5.76 0 5.76s0 2.62.34 3.88a2 2 0 0 0 1.4 1.41C2.99 11.39 8 11.39 8 11.39s5.01 0 6.26-.34a2 2 0 0 0 1.4-1.41C16 8.38 16 5.76 16 5.76s0-2.62-.34-3.88zM6.4 8.23V3.29l4.18 2.47L6.4 8.23z"/>
+      </svg>
+    </div>
+  </div>
+  <div class="footer-copy">© 2023 MOON RUST TEAM</div>
+</footer>
+
+<script>
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.member-card, .about-card, .join-text').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
