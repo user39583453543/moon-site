@@ -3,115 +3,153 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MOON</title>
+<title>MOON — Rust Team</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500&family=Barlow+Condensed:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: #0b0f14;
-  color: #fff;
+  background: #0a0a0b;
+  color: white;
+  font-family: 'Barlow', sans-serif;
+}
+
+/* 🌌 STARS */
+.stars {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: url('https://www.transparenttextures.com/patterns/stardust.png');
+  opacity: 0.15;
+  z-index: -1;
+  animation: moveStars 60s linear infinite;
+}
+
+@keyframes moveStars {
+  from { transform: translateY(0); }
+  to { transform: translateY(-1000px); }
 }
 
 /* NAV */
 nav {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  padding: 20px 40px;
   display: flex;
   justify-content: space-between;
-  padding: 20px 40px;
-  border-bottom: 1px solid #1a1f26;
-}
-
-nav div {
-  font-family: 'Bebas Neue';
-  letter-spacing: 3px;
+  background: rgba(0,0,0,0.6);
 }
 
 nav a {
-  margin-left: 20px;
-  color: #888;
+  color: #aaa;
+  margin: 0 15px;
   text-decoration: none;
+  font-size: 13px;
 }
 
-nav a:hover {
-  color: white;
-}
+nav a:hover { color: white; }
 
 /* HERO */
-.hero {
-  height: 90vh;
+header {
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.hero h1 {
+header h1 {
   font-family: 'Bebas Neue';
   font-size: 120px;
-  letter-spacing: 8px;
-}
-
-.hero p {
-  color: #888;
+  letter-spacing: 10px;
+  text-shadow:
+    0 0 40px rgba(255,255,255,0.2),
+    0 0 80px rgba(200,200,255,0.1);
 }
 
 /* SECTION */
-.section {
-  padding: 80px 20px;
-  max-width: 1000px;
+section {
+  padding: 100px 20px;
+  max-width: 1100px;
   margin: auto;
+  text-align: center;
 }
 
 /* ROSTER */
-.roster {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+.roster-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
 }
 
-.card {
-  background: #11161c;
+.member-card {
+  width: 160px;
+  background: linear-gradient(145deg, #141416, #0e0e10);
+  border-radius: 12px;
   padding: 20px;
-  border-radius: 10px;
-  border: 1px solid #1f2933;
+  position: relative;
+  overflow: hidden;
   transition: 0.3s;
 }
 
-.card:hover {
-  border-color: #444;
-  transform: translateY(-5px);
+.member-card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 30px 120px rgba(0,0,0,0.9);
+}
+
+/* shine effect */
+.member-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.08), transparent);
+  transition: 0.5s;
+}
+
+.member-card:hover::after {
+  left: 100%;
 }
 
 /* FLAGS */
-.flag {
+.member-flag {
+  width: 70px;
+  height: 50px;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.member-flag img {
   width: 100%;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 6px;
+  height: 100%;
 }
 
 /* TEXT */
-.name {
+.member-name {
   font-family: 'Bebas Neue';
+  letter-spacing: 3px;
   margin-top: 10px;
-  letter-spacing: 2px;
 }
 
-.role {
-  font-size: 12px;
-  color: #aaa;
+.member-role {
+  font-size: 10px;
+  opacity: 0.6;
 }
 
-.country {
-  font-size: 11px;
-  color: #666;
+.member-country {
+  font-size: 10px;
+  opacity: 0.4;
+  text-transform: uppercase;
 }
 
 /* BUTTON */
 .btn {
-  display: inline-block;
   padding: 12px 25px;
   border: 1px solid white;
   text-decoration: none;
@@ -127,6 +165,8 @@ nav a:hover {
 
 <body>
 
+<div class="stars"></div>
+
 <nav>
   <div>MOON</div>
   <div>
@@ -136,81 +176,81 @@ nav a:hover {
   </div>
 </nav>
 
-<div class="hero">
+<header>
   <h1>MOON</h1>
-  <p>Rust Team</p>
-</div>
+  <p>RUST TEAM</p>
+</header>
 
-<div class="section" id="team">
-  <h2>Roster</h2>
+<section id="team">
+  <h2>ROSTER</h2>
 
-  <div class="roster">
+  <div class="roster-grid">
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w320/ru.png">
-      <div class="name">Calestia</div>
-      <div class="role">Leader</div>
-      <div class="country">Russia</div>
+    <div class="member-card">
+      <div class="member-role">Leader</div>
+      <div class="member-flag"><img src="https://flagcdn.com/w80/ru.png"></div>
+      <div class="member-name">Calestia</div>
+      <div class="member-country">Russia</div>
     </div>
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w320/us.png">
-      <div class="name">Swiggle</div>
-      <div class="role">Leader</div>
-      <div class="country">United States</div>
+    <div class="member-card">
+      <div class="member-role">Leader</div>
+      <div class="member-flag"><img src="https://flagcdn.com/w80/us.png"></div>
+      <div class="member-name">Swiggle</div>
+      <div class="member-country">United States</div>
     </div>
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w320/ro.png">
-      <div class="name">Vexy</div>
-      <div class="role">Co-Leader</div>
-      <div class="country">Romania</div>
+    <div class="member-card">
+      <div class="member-role">Co-Leader</div>
+      <div class="member-flag"><img src="https://flagcdn.com/w80/ro.png"></div>
+      <div class="member-name">Vexy</div>
+      <div class="member-country">Romania</div>
     </div>
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w320/tr.png">
-      <div class="name">Zyrex</div>
-      <div class="role">Co-Leader</div>
-      <div class="country">Turkey</div>
+    <div class="member-card">
+      <div class="member-role">Co-Leader</div>
+      <div class="member-flag"><img src="https://flagcdn.com/w80/tr.png"></div>
+      <div class="member-name">Zyrex</div>
+      <div class="member-country">Turkey</div>
     </div>
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w320/de.png">
-      <div class="name">Jxst Lachs</div>
-      <div class="role">Builder</div>
-      <div class="country">Germany</div>
+    <div class="member-card">
+      <div class="member-role">Builder</div>
+      <div class="member-flag"><img src="https://flagcdn.com/w80/de.png"></div>
+      <div class="member-name">Jxst Lachs</div>
+      <div class="member-country">Germany</div>
     </div>
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w320/za.png">
-      <div class="name">Loock</div>
-      <div class="role">Builder</div>
-      <div class="country">South Africa</div>
+    <div class="member-card">
+      <div class="member-role">Builder</div>
+      <div class="member-flag"><img src="https://flagcdn.com/w80/za.png"></div>
+      <div class="member-name">Loock</div>
+      <div class="member-country">South Africa</div>
     </div>
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w320/lt.png">
-      <div class="name">Real</div>
-      <div class="role">Electrician</div>
-      <div class="country">Lithuania</div>
+    <div class="member-card">
+      <div class="member-role">Electrician</div>
+      <div class="member-flag"><img src="https://flagcdn.com/w80/lt.png"></div>
+      <div class="member-name">Real</div>
+      <div class="member-country">Lithuania</div>
     </div>
 
   </div>
-</div>
+</section>
 
-<div class="section" id="about">
-  <h2>About</h2>
+<section id="about">
+  <h2>ABOUT</h2>
   <p>
-    Moon is a team created by Calestia and Vexy with 3+ years of leading experience.
-    They create the worst to the best and have a unique play style compared to average groups.
+    Moon is a team created by Calestia and Vexy with 3+ years of leading experience,
+    they create the worst to the best and have a unique play style compared to the average groups.
   </p>
-</div>
+</section>
 
-<div class="section" id="join">
-  <h2>Join</h2>
+<section id="join">
+  <h2>JOIN</h2>
   <p>Make a ticket through Discord</p>
-  <a href="https://discord.gg/moonteam" class="btn">Join Discord</a>
-</div>
+  <a href="https://discord.gg/moonteam" class="btn" target="_blank">Join Discord</a>
+</section>
 
 </body>
 </html>
