@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MOON</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 body {
@@ -16,49 +16,44 @@ body {
   overflow-x: hidden;
 }
 
-/* 🌌 ANIMATED STARS */
-.stars, .stars2 {
+/* 🌌 PARALLAX STARS */
+.stars1, .stars2, .stars3 {
   position: fixed;
   width: 100%;
   height: 100%;
-  background: transparent url('https://www.transparenttextures.com/patterns/stardust.png');
-  z-index: -2;
+  background: url('https://www.transparenttextures.com/patterns/stardust.png');
+  z-index: -3;
 }
 
-.stars { animation: moveStars 60s linear infinite; opacity: 0.2; }
-.stars2 { animation: moveStars 120s linear infinite reverse; opacity: 0.1; }
+.stars1 { animation: move 100s linear infinite; opacity: 0.2; }
+.stars2 { animation: move 150s linear infinite reverse; opacity: 0.1; }
+.stars3 { animation: move 200s linear infinite; opacity: 0.05; }
 
-@keyframes moveStars {
+@keyframes move {
   from { transform: translateY(0); }
   to { transform: translateY(-2000px); }
 }
 
-/* 🌙 GLOW */
-.glow {
+/* 🖱️ MOUSE GLOW */
+.cursor-glow {
   position: fixed;
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(circle, rgba(200,200,255,0.1), transparent 70%);
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+  pointer-events: none;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
   z-index: -1;
-  animation: pulse 6s infinite;
-}
-
-@keyframes pulse {
-  0%,100% { opacity: 0.5; }
-  50% { opacity: 1; }
 }
 
 /* NAV */
 nav {
   position: fixed;
   width: 100%;
-  padding: 20px;
   display: flex;
   justify-content: center;
   gap: 40px;
+  padding: 20px;
   background: rgba(0,0,0,0.5);
 }
 
@@ -79,22 +74,19 @@ header {
 }
 
 header h1 {
-  font-size: 140px;
+  font-size: 150px;
   letter-spacing: 10px;
-  text-shadow:
-    0 0 40px rgba(255,255,255,0.3),
-    0 0 100px rgba(150,150,255,0.2);
   animation: float 4s ease-in-out infinite;
 }
 
 @keyframes float {
   0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-12px); }
 }
 
 /* SECTION */
 section {
-  padding: 100px 20px;
+  padding: 120px 20px;
   text-align: center;
 }
 
@@ -111,50 +103,23 @@ section {
   padding: 20px;
   background: rgba(255,255,255,0.05);
   border-radius: 15px;
-  position: relative;
-  overflow: hidden;
   transition: 0.4s;
 }
-
-/* glow border */
-.card::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  background: linear-gradient(45deg, #fff, transparent);
-  opacity: 0;
-  transition: 0.4s;
-}
-
-.card:hover::before { opacity: 0.3; }
 
 .card:hover {
-  transform: scale(1.1) rotate(1deg);
-  box-shadow: 0 0 60px rgba(255,255,255,0.2);
+  transform: scale(1.1);
+  box-shadow: 0 0 80px rgba(255,255,255,0.2);
 }
 
-/* FLAGS */
 .flag {
   width: 80px;
   height: 60px;
   border-radius: 8px;
 }
 
-/* TEXT */
-.name {
-  font-size: 22px;
-  margin-top: 10px;
-}
-
-.role {
-  font-size: 12px;
-  opacity: 0.6;
-}
-
-.country {
-  font-size: 11px;
-  opacity: 0.4;
-}
+.name { font-size: 22px; }
+.role { font-size: 12px; opacity: 0.6; }
+.country { font-size: 11px; opacity: 0.4; }
 
 /* BUTTON */
 .btn {
@@ -162,8 +127,6 @@ section {
   border: 1px solid white;
   text-decoration: none;
   color: white;
-  display: inline-block;
-  margin-top: 20px;
 }
 
 .btn:hover {
@@ -175,9 +138,10 @@ section {
 
 <body>
 
-<div class="stars"></div>
+<div class="stars1"></div>
 <div class="stars2"></div>
-<div class="glow"></div>
+<div class="stars3"></div>
+<div class="cursor-glow" id="glow"></div>
 
 <nav>
   <a href="#team">TEAM</a>
@@ -240,14 +204,30 @@ section {
 </section>
 
 <section id="about">
-  <h2>ABOUT</h2>
-  <p>Moon is a high-level Rust team with years of leadership and a unique aggressive playstyle.</p>
+  <h2>ABOUT MOON</h2>
+  <p>
+  MOON is not just another Rust team. Built by Calestia and Vexy with over 3+ years of leadership,
+  the team focuses on domination, control, and adaptability.
+  <br><br>
+  We take players from nothing and turn them into high-level competitors.
+  Every wipe is calculated. Every fight is intentional.
+  <br><br>
+  While other groups follow metas, MOON creates its own playstyle.
+  </p>
 </section>
 
 <section id="join">
   <h2>JOIN</h2>
   <a href="https://discord.gg/moonteam" class="btn">Join Discord</a>
 </section>
+
+<script>
+document.addEventListener("mousemove", e => {
+  const glow = document.getElementById("glow");
+  glow.style.left = e.clientX + "px";
+  glow.style.top = e.clientY + "px";
+});
+</script>
 
 </body>
 </html>
