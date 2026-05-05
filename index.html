@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vexy</title>
+<title>VEXY</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
 
@@ -11,109 +11,123 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 
 :root{
-  --bg:#050505;
   --pink:#ff2ea6;
+  --bg:#020202;
 }
 
 body{
+  font-family:'Barlow';
   background:var(--bg);
   color:white;
-  font-family:'Barlow',sans-serif;
-  overflow-x:hidden;
+  overflow:hidden;
   cursor:none;
 }
 
-/* 🌌 PARTICLES */
-canvas{
+/* INTRO GLITCH */
+#intro{
   position:fixed;
-  top:0;
-  left:0;
-  z-index:-1;
+  inset:0;
+  background:black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
 }
 
-/* CURSOR */
-.cursor{
-  position:fixed;
-  width:10px;
-  height:10px;
-  background:var(--pink);
-  border-radius:50%;
-  pointer-events:none;
-  z-index:9999;
-  box-shadow:0 0 25px var(--pink);
+.glitch{
+  font-family:'Bebas Neue';
+  font-size:100px;
+  position:relative;
+  color:white;
+  text-shadow:0 0 20px var(--pink);
+  animation:glitch 1s infinite;
+}
+
+@keyframes glitch{
+  0%{transform:translate(0);}
+  20%{transform:translate(-2px,2px);}
+  40%{transform:translate(2px,-2px);}
+  60%{transform:translate(-2px,1px);}
+  80%{transform:translate(2px,1px);}
+  100%{transform:translate(0);}
+}
+
+/* MAIN */
+#main{
+  display:none;
+  height:100vh;
+  scroll-snap-type:y mandatory;
+  overflow-y:scroll;
+}
+
+/* SECTIONS */
+.panel{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  scroll-snap-align:start;
+  position:relative;
 }
 
 /* HERO */
-header{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
-
-header h1{
+.hero h1{
+  font-size:180px;
   font-family:'Bebas Neue';
-  font-size:140px;
-  letter-spacing:12px;
-  text-shadow:0 0 60px var(--pink);
+  text-shadow:0 0 80px var(--pink);
 }
 
-header p{
+.hero p{
   color:var(--pink);
 }
 
-/* SECTION */
-.section{
-  padding:100px 20px;
-  max-width:1100px;
-  margin:auto;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:25px;
-}
-
-/* CARD */
+/* CARDS */
 .card{
   padding:30px;
+  margin:20px;
   background:rgba(255,255,255,0.03);
   border:1px solid rgba(255,255,255,0.1);
-  backdrop-filter:blur(10px);
-  cursor:pointer;
   transition:0.3s;
+  cursor:pointer;
 }
 
 .card:hover{
-  transform:translateY(-10px);
-  border-color:var(--pink);
-  box-shadow:0 0 40px var(--pink);
+  transform:scale(1.1);
+  box-shadow:0 0 60px var(--pink);
 }
 
-.card-extra{
-  max-height:0;
-  overflow:hidden;
-  opacity:0;
-  transition:0.4s;
-  margin-top:10px;
+/* WK FULL SCREEN */
+#wkFull{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:40px;
+  z-index:999;
 }
 
-.card.active .card-extra{
-  max-height:200px;
-  opacity:1;
+#wkFull h2{
+  font-size:60px;
+  font-family:'Bebas Neue';
 }
 
-/* BUTTON */
-.btn{
-  display:inline-block;
+#wkFull p{
+  max-width:700px;
   margin-top:20px;
+  color:#aaa;
+  line-height:1.6;
+}
+
+.btn{
+  margin-top:30px;
   padding:12px 25px;
   border:1px solid var(--pink);
   color:var(--pink);
   text-decoration:none;
-  cursor:pointer;
 }
 
 .btn:hover{
@@ -121,154 +135,103 @@ header p{
   color:black;
 }
 
-/* MUSIC BUTTON */
-.music-btn{
+/* CURSOR */
+.cursor{
+  width:12px;
+  height:12px;
+  background:var(--pink);
   position:fixed;
-  top:20px;
-  right:20px;
-  background:rgba(0,0,0,0.6);
-  padding:10px 15px;
-  border:1px solid var(--pink);
-  color:var(--pink);
-  cursor:pointer;
-  z-index:1000;
+  border-radius:50%;
+  pointer-events:none;
+  box-shadow:0 0 30px var(--pink);
 }
 
-footer{
-  text-align:center;
-  padding:50px;
-  border-top:1px solid rgba(255,255,255,0.1);
+/* BACKGROUND */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 MUSIC -->
-<audio id="bgMusic" loop>
-  <source src="music.mp3" type="audio/mpeg">
+<!-- INTRO -->
+<div id="intro" onclick="start()">
+  <div class="glitch">VEXY</div>
+</div>
+
+<!-- MUSIC -->
+<audio id="music" loop>
+  <source src="music.mp3">
 </audio>
 
-<button class="music-btn" onclick="toggleMusic()">🎵 MUSIC</button>
+<!-- MAIN -->
+<div id="main">
 
 <canvas id="bg"></canvas>
 <div class="cursor"></div>
 
-<header>
+<!-- HERO -->
+<section class="panel hero">
   <h1>VEXY</h1>
-  <p>AGGRESSIVE • LEADER • 11K+ HOURS</p>
-</header>
+  <p>AGGRESSIVE • LEADER • 11K+</p>
+</section>
 
-<section class="section">
-  <h2>ABOUT</h2>
-  <p style="opacity:0.7;margin-top:10px;">
-    Started in 2020, Vexy built dominance through pure aggression and leadership.
-    Over 11,000 hours and $6000+ earnings prove consistency at the highest level.
+<!-- PROFILE -->
+<section class="panel">
+  <div class="card">PLAYSTYLE: AGRO</div>
+  <div class="card">HOURS: 11K+</div>
+  <div class="card">STRENGTH: LEADER</div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="panel">
+  <div class="card" onclick="openWK()">WK TEAM</div>
+  <div class="card">RISE</div>
+  <div class="card">TURRETS</div>
+</section>
+
+<!-- SOCIALS -->
+<section class="panel">
+  <a href="https://www.youtube.com/@VexyRustt" target="_blank" class="btn">YouTube</a>
+</section>
+
+</div>
+
+<!-- WK FULL -->
+<div id="wkFull" onclick="closeWK()">
+  <h2>wK TEAM</h2>
+  <p>
+    Founded in 2020 by Crd. One of the most competitive Rust teams in history.
+    Dominating Rustoria, Vital and Atlas servers with thousands in earnings.
   </p>
-</section>
-
-<section class="section">
-  <h2>PROFILE</h2>
-
-  <div class="grid">
-    <div class="card" onclick="toggleCard(this)">
-      <h3>PLAYSTYLE</h3>
-      <p>AGRO</p>
-      <div class="card-extra">
-        Vexy developed multiple playstyles over 6 years — aggressive, confident, and unpredictable.
-      </div>
-    </div>
-
-    <div class="card" onclick="toggleCard(this)">
-      <h3>HOURS</h3>
-      <p>11K+</p>
-      <div class="card-extra">
-        Thousands of hours mastering every mechanic in Rust.
-      </div>
-    </div>
-
-    <div class="card" onclick="toggleCard(this)">
-      <h3>STRENGTH</h3>
-      <p>LEADERSHIP</p>
-      <div class="card-extra">
-        Strong team coordination and commanding presence in fights.
-      </div>
-    </div>
-
-    <div class="card" onclick="toggleCard(this)">
-      <h3>VIBE</h3>
-      <p>HIGH ENERGY</p>
-      <div class="card-extra">
-        Always bringing energy, confidence, and chaos.
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <h2>ACHIEVEMENTS</h2>
-
-  <div class="grid">
-    <div class="card" onclick="toggleCard(this)">
-      <h3>WK TEAM</h3>
-      <p>$2000 WIN</p>
-      <div class="card-extra">
-        One of the strongest competitive Rust teams with tournament dominance.
-      </div>
-    </div>
-
-    <div class="card" onclick="toggleCard(this)">
-      <h3>RISE</h3>
-      <p>$500 WIN</p>
-      <div class="card-extra">
-        Leader Zeiiken. Strong competitive structure and performance.
-      </div>
-    </div>
-
-    <div class="card" onclick="toggleCard(this)">
-      <h3>TURRETS</h3>
-      <p>BUILDER</p>
-      <div class="card-extra">
-        Started electrical work in 2023 and became one of the fastest turret builders.
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <h2>SOCIALS</h2>
-
-  <a class="btn" href="https://www.youtube.com/@VexyRustt" target="_blank">
-    YouTube
-  </a>
-
-  <div class="btn" onclick="copyDiscord()">
-    Copy Discord: v.xy.
-  </div>
-</section>
-
-<footer>
-  © 2026 VEXY RUST — THE BEST
-</footer>
+  <a href="https://discord.gg/wkrust" target="_blank" class="btn">JOIN DISCORD</a>
+</div>
 
 <script>
-/* MUSIC */
-let playing=false;
-function toggleMusic(){
-  const m=document.getElementById("bgMusic");
-  if(!playing){m.play();playing=true;}
-  else{m.pause();playing=false;}
+function start(){
+  document.getElementById("intro").style.display="none";
+  document.getElementById("main").style.display="block";
+  let m=document.getElementById("music");
+  m.volume=0;
+  m.play();
+  let v=0;
+  let fade=setInterval(()=>{
+    v+=0.02;
+    m.volume=v;
+    if(v>=1) clearInterval(fade);
+  },100);
 }
 
-/* CARDS */
-function toggleCard(el){
-  el.classList.toggle("active");
+/* WK */
+function openWK(){
+  document.getElementById("wkFull").style.display="flex";
 }
-
-/* DISCORD */
-function copyDiscord(){
-  navigator.clipboard.writeText("v.xy.");
-  alert("Copied!");
+function closeWK(){
+  document.getElementById("wkFull").style.display="none";
 }
 
 /* CURSOR */
@@ -284,14 +247,14 @@ canvas.width=innerWidth;
 canvas.height=innerHeight;
 
 let p=[];
-for(let i=0;i<120;i++){
+for(let i=0;i<200;i++){
   p.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2});
 }
 
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   p.forEach(dot=>{
-    dot.y-=0.3;
+    dot.y-=0.4;
     if(dot.y<0) dot.y=canvas.height;
     ctx.fillStyle=Math.random()>0.5?"#ff2ea6":"white";
     ctx.fillRect(dot.x,dot.y,dot.s,dot.s);
