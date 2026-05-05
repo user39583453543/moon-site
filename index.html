@@ -1,282 +1,263 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MOON</title>
+<title>VEXY</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500&family=Barlow+Condensed:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-html {
-  scroll-behavior: smooth;
+:root {
+  --bg: #050505;
+  --pink: #ff2ea6;
+  --white: #ffffff;
+  --dim: rgba(255,255,255,0.5);
 }
+
+/* RESET */
+* { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  margin: 0;
-  background: #000;
-  color: white;
-  font-family: 'Orbitron', sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Barlow', sans-serif;
   overflow-x: hidden;
-  animation: fadeIn 1s ease;
 }
 
-/* FADE IN */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* 🌌 STARS */
-.stars1, .stars2, .stars3 {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: url('https://www.transparenttextures.com/patterns/stardust.png');
-  z-index: -3;
-}
-
-.stars1 { animation: move 100s linear infinite; opacity: 0.2; }
-.stars2 { animation: move 150s linear infinite reverse; opacity: 0.1; }
-.stars3 { animation: move 200s linear infinite; opacity: 0.05; }
-
-@keyframes move {
-  from { transform: translateY(0); }
-  to { transform: translateY(-2000px); }
-}
-
-/* 🖱️ CURSOR GLOW */
-.cursor-glow {
-  position: fixed;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
-  pointer-events: none;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  z-index: -1;
+/* GLOW BACKGROUND */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background: radial-gradient(circle at 50% 20%, rgba(255,46,166,0.15), transparent 60%);
+  z-index:-1;
 }
 
 /* NAV */
 nav {
   position: fixed;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  padding: 20px;
+  width:100%;
+  top:0;
+  padding: 20px 60px;
+  display:flex;
+  justify-content:space-between;
   background: rgba(0,0,0,0.5);
-  z-index: 10;
+  backdrop-filter: blur(10px);
 }
 
 nav a {
-  color: #aaa;
-  text-decoration: none;
+  color: var(--dim);
+  text-decoration:none;
+  margin-left:30px;
+  font-size:13px;
+  letter-spacing:2px;
 }
 
-nav a:hover {
-  color: white;
-}
+nav a:hover { color: var(--pink); }
 
 /* HERO */
-header {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.hero {
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:0 100px;
 }
 
-header h1 {
-  font-size: 150px;
-  letter-spacing: 10px;
-  animation: float 4s ease-in-out infinite;
-  text-shadow:
-    0 0 40px rgba(255,255,255,0.3),
-    0 0 100px rgba(150,150,255,0.2);
+.hero h1 {
+  font-family:'Bebas Neue';
+  font-size:clamp(100px,16vw,200px);
+  letter-spacing:12px;
 }
 
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+.hero h1 span {
+  color: var(--pink);
+  text-shadow:0 0 60px rgba(255,46,166,0.6);
 }
 
-/* SECTION */
-section {
-  padding: 120px 20px;
-  text-align: center;
-}
-
-/* ROSTER */
-.roster {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 25px;
-}
-
-.card {
-  width: 180px;
-  padding: 20px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 15px;
-  position: relative;
-  overflow: hidden;
-  transition: 0.4s;
-}
-
-.card:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 80px rgba(255,255,255,0.2);
-}
-
-/* LIGHT SWIPE */
-.card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.1), transparent);
-  transition: 0.5s;
-}
-
-.card:hover::after {
-  left: 100%;
-}
-
-/* FLAGS */
-.flag {
-  width: 80px;
-  height: 60px;
-  border-radius: 8px;
-}
-
-/* TEXT */
-.name {
-  font-size: 22px;
-}
-
-.role {
-  font-size: 12px;
-  opacity: 0.6;
-}
-
-.country {
-  font-size: 11px;
-  opacity: 0.4;
+.hero p {
+  color: var(--dim);
+  margin-top:10px;
+  letter-spacing:4px;
 }
 
 /* BUTTON */
 .btn {
-  padding: 15px 30px;
-  border: 1px solid white;
-  text-decoration: none;
-  color: white;
-  display: inline-block;
-  margin-top: 20px;
+  margin-top:40px;
+  display:inline-block;
+  padding:14px 32px;
+  border:1px solid var(--pink);
+  color: var(--pink);
+  text-decoration:none;
+  letter-spacing:2px;
+  transition:0.3s;
 }
 
 .btn:hover {
-  background: white;
-  color: black;
+  background: var(--pink);
+  color:black;
+  box-shadow:0 0 30px rgba(255,46,166,0.6);
+}
+
+/* SECTION */
+.section {
+  padding:120px 100px;
+  max-width:1200px;
+}
+
+.section h2 {
+  font-family:'Bebas Neue';
+  font-size:60px;
+  margin-bottom:20px;
+}
+
+/* GRID */
+.grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+
+/* CARDS */
+.card {
+  padding:25px;
+  border:1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+  transition:0.3s;
+  position:relative;
+  overflow:hidden;
+}
+
+.card::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: linear-gradient(120deg, transparent, rgba(255,46,166,0.2), transparent);
+  opacity:0;
+  transition:0.3s;
+}
+
+.card:hover {
+  transform:translateY(-8px);
+  border-color: var(--pink);
+}
+
+.card:hover::after {
+  opacity:1;
+}
+
+.card h3 {
+  font-family:'Bebas Neue';
+  letter-spacing:2px;
+}
+
+.card p {
+  font-size:12px;
+  color:var(--dim);
+}
+
+/* SCROLL ANIMATION */
+.reveal {
+  opacity:0;
+  transform:translateY(30px);
+  transition:0.7s;
+}
+
+.reveal.active {
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* FOOTER */
+footer {
+  padding:40px;
+  text-align:center;
+  color:var(--dim);
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero { padding:0 30px; }
+  .section { padding:80px 30px; }
 }
 </style>
+
 </head>
 
 <body>
 
-<div class="stars1"></div>
-<div class="stars2"></div>
-<div class="stars3"></div>
-<div class="cursor-glow" id="glow"></div>
+<!-- NAV -->
 
 <nav>
-  <a href="#team">TEAM</a>
-  <a href="#about">ABOUT</a>
-  <a href="#join">JOIN</a>
+  <div>VEXY</div>
+  <div>
+    <a href="#home">HOME</a>
+    <a href="#about">ABOUT</a>
+    <a href="#socials">SOCIALS</a>
+  </div>
 </nav>
 
-<header>
-  <h1>MOON</h1>
-</header>
+<!-- HERO -->
 
-<section id="team">
-  <h2>ROSTER</h2>
+<section class="hero" id="home">
+  <h1>VEXY <span>RUST</span></h1>
+  <p>CONTENT CREATOR • DOMINATING WIPES</p>
+  <a href="#socials" class="btn">VIEW SOCIALS</a>
+</section>
 
-  <div class="roster">
+<!-- ABOUT -->
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w80/ru.png">
-      <div class="name">Calestia</div>
-      <div class="role">Leader</div>
-      <div class="country">Russia</div>
-    </div>
+<section class="section reveal" id="about">
+  <h2>ABOUT</h2>
+  <p>
+    Vexy is a Rust content creator focused on PvP, raiding, and full server domination.
+    Known for aggressive gameplay, clean mechanics, and high-pressure plays.
+    Every wipe is a takeover.
+  </p>
+</section>
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w80/us.png">
-      <div class="name">Swiggle</div>
-      <div class="role">Leader</div>
-      <div class="country">United States</div>
-    </div>
+<!-- SOCIALS -->
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w80/ro.png">
-      <div class="name">Vexy</div>
-      <div class="role">Co-Leader</div>
-      <div class="country">Romania</div>
-    </div>
+<section class="section reveal" id="socials">
+  <h2>SOCIALS</h2>
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w80/de.png">
-      <div class="name">Jxst Lachs</div>
-      <div class="role">Builder</div>
-      <div class="country">Germany</div>
-    </div>
+  <div class="grid">
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w80/za.png">
-      <div class="name">Loock</div>
-      <div class="role">Builder</div>
-      <div class="country">South Africa</div>
-    </div>
+```
+<div class="card">
+  <h3>YOUTUBE</h3>
+  <p>@VexyRustt</p>
+</div>
 
-    <div class="card">
-      <img class="flag" src="https://flagcdn.com/w80/lt.png">
-      <div class="name">Real</div>
-      <div class="role">Electrician</div>
-      <div class="country">Lithuania</div>
-    </div>
+<div class="card">
+  <h3>DISCORD</h3>
+  <p>v.xy.</p>
+</div>
+```
 
   </div>
 </section>
 
-<section id="about">
-  <h2>ABOUT MOON</h2>
-  <p>
-  MOON is not just another Rust team. Built by Calestia and Vexy with over 3+ years of leadership,
-  the team focuses on domination, control, and adaptability.
-  <br><br>
-  We take players from nothing and turn them into high-level competitors.
-  Every wipe is calculated. Every fight is intentional.
-  <br><br>
-  While other groups follow metas, MOON creates its own playstyle.
-  </p>
-</section>
-
-<section id="join">
-  <h2>JOIN</h2>
-  <a href="https://discord.gg/moonteam" class="btn">Join Discord</a>
-</section>
+<footer>
+  © 2026 VEXY
+</footer>
 
 <script>
-document.addEventListener("mousemove", e => {
-  const glow = document.getElementById("glow");
-  glow.style.left = e.clientX + "px";
-  glow.style.top = e.clientY + "px";
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.classList.add('active');
+    }
+  });
 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
 </body>
+</html>
+
 </html>
