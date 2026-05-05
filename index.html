@@ -1,308 +1,263 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VEXY</title>
+<title>Vexy</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500&family=Barlow+Condensed:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --bg: #050505;
-  --pink: #ff2ea6;
-  --white: #ffffff;
-  --dim: rgba(255,255,255,0.5);
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  background:#ffffff;
+  color:black;
+  font-family:'Barlow',sans-serif;
+  overflow-x:hidden;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  background: var(--bg);
-  color: var(--white);
-  font-family: 'Barlow', sans-serif;
-  overflow-x: hidden;
-}
-
-/* BACKGROUND GLOW */
-body::before {
-  content:'';
+/* 🌌 STARS */
+.stars{
   position:fixed;
-  inset:0;
-  background: radial-gradient(circle at 50% 20%, rgba(255,46,166,0.15), transparent 60%);
-  z-index:-1;
-}
-
-/* NAV */
-nav {
-  position: fixed;
   width:100%;
-  top:0;
-  padding: 20px 60px;
-  display:flex;
-  justify-content:space-between;
-  background: rgba(0,0,0,0.5);
+  height:100%;
+  background:
+    radial-gradient(2px 2px at 20% 30%, #ff2ea6, transparent),
+    radial-gradient(2px 2px at 70% 80%, black, transparent),
+    radial-gradient(2px 2px at 40% 60%, #ff2ea6, transparent),
+    radial-gradient(2px 2px at 80% 20%, black, transparent);
+  opacity:0.25;
+  z-index:-1;
+  animation:stars 60s linear infinite;
 }
-
-nav a {
-  color: var(--dim);
-  text-decoration:none;
-  margin-left:30px;
-  font-size:13px;
-  letter-spacing:2px;
+@keyframes stars{
+  from{transform:translateY(0);}
+  to{transform:translateY(-1000px);}
 }
-
-nav a:hover { color: var(--pink); }
 
 /* HERO */
-.hero {
+header{
   height:100vh;
   display:flex;
   flex-direction:column;
   justify-content:center;
-  padding:0 100px;
+  align-items:center;
+  text-align:center;
 }
-
-.hero h1 {
+header h1{
   font-family:'Bebas Neue';
-  font-size:clamp(110px,18vw,220px);
+  font-size:130px;
   letter-spacing:12px;
 }
-
-.hero h1 span {
-  color: var(--pink);
-  text-shadow:0 0 60px rgba(255,46,166,0.6);
-}
-
-.hero p {
-  color: var(--dim);
+header p{
+  color:#ff2ea6;
   margin-top:10px;
-  letter-spacing:4px;
-}
-
-/* BUTTON */
-.btn {
-  margin-top:40px;
-  display:inline-block;
-  padding:14px 32px;
-  border:1px solid var(--pink);
-  color: var(--pink);
-  text-decoration:none;
   letter-spacing:2px;
-  transition:0.3s;
-}
-
-.btn:hover {
-  background: var(--pink);
-  color:black;
-  box-shadow:0 0 30px rgba(255,46,166,0.6);
 }
 
 /* SECTION */
-.section {
-  padding:120px 100px;
-  max-width:1200px;
+.section{
+  padding:90px 20px;
+  max-width:1100px;
+  margin:auto;
 }
-
-.section h2 {
-  font-family:'Bebas Neue';
-  font-size:60px;
-  margin-bottom:20px;
-}
-
-/* GRID */
-.grid {
+.grid{
   display:grid;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:20px;
 }
 
 /* CARDS */
-.card {
+.card{
+  border:1px solid rgba(0,0,0,0.1);
   padding:25px;
-  border:1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.02);
+  background:white;
+  cursor:pointer;
   transition:0.3s;
-  position:relative;
 }
-
-.card:hover {
-  transform:translateY(-8px);
-  border-color: var(--pink);
-  box-shadow:0 0 40px rgba(255,46,166,0.3);
+.card:hover{
+  border-color:#ff2ea6;
+  transform:translateY(-5px);
+  box-shadow:0 10px 40px rgba(0,0,0,0.1);
 }
-
-.card h3 {
+.card h3{
   font-family:'Bebas Neue';
-  letter-spacing:2px;
+  letter-spacing:3px;
 }
-
-.card p {
+.card p{
   font-size:12px;
-  color:var(--dim);
+  opacity:0.6;
 }
-
-/* REVEAL */
-.reveal {
+.card-extra{
+  max-height:0;
+  overflow:hidden;
   opacity:0;
-  transform:translateY(30px);
-  transition:0.7s;
+  font-size:12px;
+  margin-top:10px;
+  transition:0.3s;
+}
+.card.active .card-extra{
+  max-height:500px;
+  opacity:1;
 }
 
-.reveal.active {
-  opacity:1;
-  transform:translateY(0);
+/* BUTTON */
+.btn{
+  display:inline-block;
+  margin-top:20px;
+  padding:12px 25px;
+  border:1px solid black;
+  text-decoration:none;
+  color:black;
+  transition:0.3s;
+}
+.btn:hover{
+  background:black;
+  color:white;
 }
 
 /* FOOTER */
-footer {
-  padding:40px;
+footer{
   text-align:center;
-  color:var(--dim);
-  border-top:1px solid rgba(255,255,255,0.08);
-}
-
-/* MOBILE */
-@media(max-width:768px){
-  .hero { padding:0 30px; }
-  .section { padding:80px 30px; }
+  padding:50px;
+  border-top:1px solid rgba(0,0,0,0.1);
+  margin-top:80px;
 }
 </style>
-
 </head>
 
 <body>
 
-<!-- NAV -->
+<div class="stars"></div>
 
-<nav>
-  <div>VEXY</div>
-  <div>
-    <a href="#home">HOME</a>
-    <a href="#about">ABOUT</a>
-    <a href="#stats">STATS</a>
-    <a href="#socials">SOCIALS</a>
-  </div>
-</nav>
-
-<!-- HERO -->
-
-<section class="hero" id="home">
-  <h1>VEXY <span>RUST</span></h1>
+<header>
+  <h1>VEXY</h1>
   <p>AGGRESSIVE • LEADER • 11K+ HOURS</p>
-  <a href="#socials" class="btn">CONNECT</a>
-</section>
+</header>
 
 <!-- ABOUT -->
-
-<section class="section reveal" id="about">
-  <h2>ABOUT</h2>
-  <p>
-    Vexy is a high-level Rust player known for aggressive gameplay, leadership, 
-    and dominating wipes. With over 11,000 hours, he specializes in coordinating 
-    teams and controlling high-pressure situations.  
+<section class="section">
+  <h2 style="font-family:Bebas Neue;">ABOUT</h2>
+  <p style="opacity:0.75;margin-top:15px;line-height:1.7;">
+    Vexy is a high-level Rust player who started in 2020 and quickly developed into a dominant force 
+    within competitive Rust. With over 11,000 hours played, he has built a reputation for aggressive 
+    gameplay, strong leadership, and elite coordination.
     <br><br>
-    The playstyle is fast, chaotic, and confident — turning fights into wins and 
-    teams into machines.
+    Throughout his career, Vexy has earned over <strong>$6000+ in personal winnings</strong>, competing 
+    in high-level environments and consistently proving his skill under pressure.
+    <br><br>
+    Known for turning chaotic situations into controlled victories, his playstyle is fast, confident, 
+    and built around leading teams to success.
   </p>
 </section>
 
-<!-- STATS -->
-
-<section class="section reveal" id="stats">
-  <h2>PROFILE</h2>
+<!-- PROFILE -->
+<section class="section">
+  <h2 style="font-family:Bebas Neue;">PROFILE</h2>
 
   <div class="grid">
 
-```
-<div class="card">
-  <h3>PLAYSTYLE</h3>
-  <p>AGGRESSIVE / CONTROL</p>
-</div>
+    <div class="card" onclick="toggleCard(this)">
+      <h3>PLAYSTYLE</h3>
+      <p>AGGRESSIVE / CONTROL</p>
+      <div class="card-extra">
+        Developed over years of experience, Vexy's playstyle combines aggressive pressure 
+        with calculated control, adapting to every fight.
+      </div>
+    </div>
 
-<div class="card">
-  <h3>HOURS</h3>
-  <p>11,000+</p>
-</div>
+    <div class="card" onclick="toggleCard(this)">
+      <h3>HOURS</h3>
+      <p>11,000+</p>
+      <div class="card-extra">
+        Thousands of hours invested into mastering mechanics, awareness, and decision-making.
+      </div>
+    </div>
 
-<div class="card">
-  <h3>STRENGTH</h3>
-  <p>TEAM COORDINATION</p>
-</div>
+    <div class="card" onclick="toggleCard(this)">
+      <h3>STRENGTH</h3>
+      <p>LEADERSHIP</p>
+      <div class="card-extra">
+        Strong ability to coordinate teams, lead fights, and control high-pressure situations.
+      </div>
+    </div>
 
-<div class="card">
-  <h3>VIBE</h3>
-  <p>CRAZY / HIGH ENERGY</p>
-</div>
-```
+    <div class="card" onclick="toggleCard(this)">
+      <h3>VIBE</h3>
+      <p>HIGH ENERGY</p>
+      <div class="card-extra">
+        Confident, fast-paced, and unpredictable — always bringing energy into every wipe.
+      </div>
+    </div>
 
   </div>
 </section>
 
 <!-- ACHIEVEMENTS -->
-
-<section class="section reveal">
-  <h2>ACHIEVEMENTS</h2>
+<section class="section">
+  <h2 style="font-family:Bebas Neue;">ACHIEVEMENTS</h2>
 
   <div class="grid">
 
-```
-<div class="card">
-  <h3>$2000 CUP WINNER</h3>
-  <p>Won cash cup with WK</p>
-</div>
+    <!-- WK -->
+    <div class="card" onclick="toggleCard(this)">
+      <h3>WK TEAM</h3>
+      <p>$2000 CASH CUP</p>
+      <div class="card-extra">
+        One of the most competitive Rust teams, known for dominating servers and winning tournaments.
+      </div>
+    </div>
 
-<div class="card">
-  <h3>$500 CUP WINNER</h3>
-  <p>Won with Rise</p>
-</div>
+    <!-- RISE -->
+    <div class="card" onclick="toggleCard(this)">
+      <h3>RISE</h3>
+      <p>$500 CASH CUP</p>
+      <div class="card-extra">
+        Leader: Zeiiken — strong competitive team with solid performance in tournaments.
+      </div>
+    </div>
 
-<div class="card">
-  <h3>TURRET BUILDER</h3>
-  <p>One of fastest in 2026</p>
-</div>
-```
+    <!-- TURRETS -->
+    <div class="card" onclick="toggleCard(this)">
+      <h3>TURRETS</h3>
+      <p>TOP BUILDER</p>
+      <div class="card-extra">
+        Started electrical work in 2023 and developed into one of the fastest and most efficient turret builders.
+      </div>
+    </div>
 
   </div>
 </section>
 
 <!-- SOCIALS -->
+<section class="section">
+  <h2 style="font-family:Bebas Neue;">SOCIALS</h2>
 
-<section class="section reveal" id="socials">
-  <h2>SOCIALS</h2>
+  <a class="btn" href="https://www.youtube.com/@VexyRustt" target="_blank">
+    YouTube
+  </a>
 
-  <div class="grid">
-
-```
-<div class="card">
-  <h3>YOUTUBE</h3>
-  <p>@VexyRustt</p>
-</div>
-
-<div class="card">
-  <h3>DISCORD</h3>
-  <p>v.xy.</p>
-</div>
-```
-
-  </div>
+  <a class="btn" onclick="copyDiscord()">
+    Copy Discord: v.xy.
+  </a>
 </section>
 
 <footer>
-  © 2026 VEXY
+  © 2026 VEXY RUST — THE BEST  
+  <br><br>
+  <a href="https://www.youtube.com/@VexyRustt" target="_blank">YouTube</a>
 </footer>
 
 <script>
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if(e.isIntersecting){
-      e.target.classList.add('active');
-    }
-  });
-});
+function toggleCard(el){
+  el.classList.toggle("active");
+}
 
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+function copyDiscord(){
+  navigator.clipboard.writeText("v.xy.");
+  alert("Discord copied!");
+}
 </script>
 
 </body>
