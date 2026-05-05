@@ -10,30 +10,37 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 
-body{
-  background:#ffffff;
-  color:black;
-  font-family:'Barlow',sans-serif;
-  overflow-x:hidden;
+:root{
+  --bg:#050505;
+  --pink:#ff2ea6;
 }
 
-/* 🌌 STARS */
-.stars{
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:
-    radial-gradient(2px 2px at 20% 30%, #ff2ea6, transparent),
-    radial-gradient(2px 2px at 70% 80%, black, transparent),
-    radial-gradient(2px 2px at 40% 60%, #ff2ea6, transparent),
-    radial-gradient(2px 2px at 80% 20%, black, transparent);
-  opacity:0.25;
-  z-index:-1;
-  animation:stars 60s linear infinite;
+body{
+  background:var(--bg);
+  color:white;
+  font-family:'Barlow',sans-serif;
+  overflow-x:hidden;
+  cursor:none;
 }
-@keyframes stars{
-  from{transform:translateY(0);}
-  to{transform:translateY(-1000px);}
+
+/* 🌌 PARTICLES */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
+}
+
+/* CURSOR */
+.cursor{
+  position:fixed;
+  width:10px;
+  height:10px;
+  background:var(--pink);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  box-shadow:0 0 25px var(--pink);
 }
 
 /* HERO */
@@ -43,62 +50,58 @@ header{
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  text-align:center;
 }
+
 header h1{
   font-family:'Bebas Neue';
-  font-size:130px;
+  font-size:140px;
   letter-spacing:12px;
+  text-shadow:0 0 60px var(--pink);
 }
+
 header p{
-  color:#ff2ea6;
-  margin-top:10px;
-  letter-spacing:2px;
+  color:var(--pink);
 }
 
 /* SECTION */
 .section{
-  padding:90px 20px;
+  padding:100px 20px;
   max-width:1100px;
   margin:auto;
 }
+
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:25px;
 }
 
-/* CARDS */
+/* CARD */
 .card{
-  border:1px solid rgba(0,0,0,0.1);
-  padding:25px;
-  background:white;
+  padding:30px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.1);
+  backdrop-filter:blur(10px);
   cursor:pointer;
   transition:0.3s;
 }
+
 .card:hover{
-  border-color:#ff2ea6;
-  transform:translateY(-5px);
-  box-shadow:0 10px 40px rgba(0,0,0,0.1);
+  transform:translateY(-10px);
+  border-color:var(--pink);
+  box-shadow:0 0 40px var(--pink);
 }
-.card h3{
-  font-family:'Bebas Neue';
-  letter-spacing:3px;
-}
-.card p{
-  font-size:12px;
-  opacity:0.6;
-}
+
 .card-extra{
   max-height:0;
   overflow:hidden;
   opacity:0;
-  font-size:12px;
+  transition:0.4s;
   margin-top:10px;
-  transition:0.3s;
 }
+
 .card.active .card-extra{
-  max-height:500px;
+  max-height:200px;
   opacity:1;
 }
 
@@ -107,71 +110,80 @@ header p{
   display:inline-block;
   margin-top:20px;
   padding:12px 25px;
-  border:1px solid black;
+  border:1px solid var(--pink);
+  color:var(--pink);
   text-decoration:none;
-  color:black;
-  transition:0.3s;
-}
-.btn:hover{
-  background:black;
-  color:white;
+  cursor:pointer;
 }
 
-/* FOOTER */
+.btn:hover{
+  background:var(--pink);
+  color:black;
+}
+
+/* MUSIC BUTTON */
+.music-btn{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:rgba(0,0,0,0.6);
+  padding:10px 15px;
+  border:1px solid var(--pink);
+  color:var(--pink);
+  cursor:pointer;
+  z-index:1000;
+}
+
 footer{
   text-align:center;
   padding:50px;
-  border-top:1px solid rgba(0,0,0,0.1);
-  margin-top:80px;
+  border-top:1px solid rgba(255,255,255,0.1);
 }
 </style>
 </head>
 
 <body>
 
-<div class="stars"></div>
+<!-- 🎵 MUSIC -->
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-btn" onclick="toggleMusic()">🎵 MUSIC</button>
+
+<canvas id="bg"></canvas>
+<div class="cursor"></div>
 
 <header>
   <h1>VEXY</h1>
   <p>AGGRESSIVE • LEADER • 11K+ HOURS</p>
 </header>
 
-<!-- ABOUT -->
 <section class="section">
-  <h2 style="font-family:Bebas Neue;">ABOUT</h2>
-  <p style="opacity:0.75;margin-top:15px;line-height:1.7;">
-    Vexy is a high-level Rust player who started in 2020 and quickly developed into a dominant force 
-    within competitive Rust. With over 11,000 hours played, he has built a reputation for aggressive 
-    gameplay, strong leadership, and elite coordination.
-    <br><br>
-    Throughout his career, Vexy has earned over <strong>$6000+ in personal winnings</strong>, competing 
-    in high-level environments and consistently proving his skill under pressure.
-    <br><br>
-    Known for turning chaotic situations into controlled victories, his playstyle is fast, confident, 
-    and built around leading teams to success.
+  <h2>ABOUT</h2>
+  <p style="opacity:0.7;margin-top:10px;">
+    Started in 2020, Vexy built dominance through pure aggression and leadership.
+    Over 11,000 hours and $6000+ earnings prove consistency at the highest level.
   </p>
 </section>
 
-<!-- PROFILE -->
 <section class="section">
-  <h2 style="font-family:Bebas Neue;">PROFILE</h2>
+  <h2>PROFILE</h2>
 
   <div class="grid">
-
     <div class="card" onclick="toggleCard(this)">
       <h3>PLAYSTYLE</h3>
-      <p>AGGRESSIVE / CONTROL</p>
+      <p>AGRO</p>
       <div class="card-extra">
-        Developed over years of experience, Vexy's playstyle combines aggressive pressure 
-        with calculated control, adapting to every fight.
+        Vexy developed multiple playstyles over 6 years — aggressive, confident, and unpredictable.
       </div>
     </div>
 
     <div class="card" onclick="toggleCard(this)">
       <h3>HOURS</h3>
-      <p>11,000+</p>
+      <p>11K+</p>
       <div class="card-extra">
-        Thousands of hours invested into mastering mechanics, awareness, and decision-making.
+        Thousands of hours mastering every mechanic in Rust.
       </div>
     </div>
 
@@ -179,7 +191,7 @@ footer{
       <h3>STRENGTH</h3>
       <p>LEADERSHIP</p>
       <div class="card-extra">
-        Strong ability to coordinate teams, lead fights, and control high-pressure situations.
+        Strong team coordination and commanding presence in fights.
       </div>
     </div>
 
@@ -187,77 +199,106 @@ footer{
       <h3>VIBE</h3>
       <p>HIGH ENERGY</p>
       <div class="card-extra">
-        Confident, fast-paced, and unpredictable — always bringing energy into every wipe.
+        Always bringing energy, confidence, and chaos.
       </div>
     </div>
-
   </div>
 </section>
 
-<!-- ACHIEVEMENTS -->
 <section class="section">
-  <h2 style="font-family:Bebas Neue;">ACHIEVEMENTS</h2>
+  <h2>ACHIEVEMENTS</h2>
 
   <div class="grid">
-
-    <!-- WK -->
     <div class="card" onclick="toggleCard(this)">
       <h3>WK TEAM</h3>
-      <p>$2000 CASH CUP</p>
+      <p>$2000 WIN</p>
       <div class="card-extra">
-        One of the most competitive Rust teams, known for dominating servers and winning tournaments.
+        One of the strongest competitive Rust teams with tournament dominance.
       </div>
     </div>
 
-    <!-- RISE -->
     <div class="card" onclick="toggleCard(this)">
       <h3>RISE</h3>
-      <p>$500 CASH CUP</p>
+      <p>$500 WIN</p>
       <div class="card-extra">
-        Leader: Zeiiken — strong competitive team with solid performance in tournaments.
+        Leader Zeiiken. Strong competitive structure and performance.
       </div>
     </div>
 
-    <!-- TURRETS -->
     <div class="card" onclick="toggleCard(this)">
       <h3>TURRETS</h3>
-      <p>TOP BUILDER</p>
+      <p>BUILDER</p>
       <div class="card-extra">
-        Started electrical work in 2023 and developed into one of the fastest and most efficient turret builders.
+        Started electrical work in 2023 and became one of the fastest turret builders.
       </div>
     </div>
-
   </div>
 </section>
 
-<!-- SOCIALS -->
 <section class="section">
-  <h2 style="font-family:Bebas Neue;">SOCIALS</h2>
+  <h2>SOCIALS</h2>
 
   <a class="btn" href="https://www.youtube.com/@VexyRustt" target="_blank">
     YouTube
   </a>
 
-  <a class="btn" onclick="copyDiscord()">
+  <div class="btn" onclick="copyDiscord()">
     Copy Discord: v.xy.
-  </a>
+  </div>
 </section>
 
 <footer>
-  © 2026 VEXY RUST — THE BEST  
-  <br><br>
-  <a href="https://www.youtube.com/@VexyRustt" target="_blank">YouTube</a>
+  © 2026 VEXY RUST — THE BEST
 </footer>
 
 <script>
+/* MUSIC */
+let playing=false;
+function toggleMusic(){
+  const m=document.getElementById("bgMusic");
+  if(!playing){m.play();playing=true;}
+  else{m.pause();playing=false;}
+}
+
+/* CARDS */
 function toggleCard(el){
   el.classList.toggle("active");
 }
 
+/* DISCORD */
 function copyDiscord(){
   navigator.clipboard.writeText("v.xy.");
-  alert("Discord copied!");
+  alert("Copied!");
 }
+
+/* CURSOR */
+const cursor=document.querySelector(".cursor");
+document.addEventListener("mousemove",e=>{
+  cursor.style.transform=`translate(${e.clientX}px,${e.clientY}px)`;
+});
+
+/* PARTICLES */
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let p=[];
+for(let i=0;i<120;i++){
+  p.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2});
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  p.forEach(dot=>{
+    dot.y-=0.3;
+    if(dot.y<0) dot.y=canvas.height;
+    ctx.fillStyle=Math.random()>0.5?"#ff2ea6":"white";
+    ctx.fillRect(dot.x,dot.y,dot.s,dot.s);
+  });
+  requestAnimationFrame(draw);
+}
+draw();
 </script>
 
 </body>
